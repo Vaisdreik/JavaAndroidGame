@@ -17,7 +17,7 @@ public class GameObject extends Base2DGameObject implements Movable {
 
     public GameObject() {
         img = new Texture("badlogic.jpg");
-        size = new Vector2(img.getWidth(), img.getHeight());
+        size = new Vector2(21f, 21f);
         pos = new Vector2(0, 0);
         dir = new Vector2(3, 2);
         speed = 0.5f;

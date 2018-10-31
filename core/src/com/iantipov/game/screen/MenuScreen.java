@@ -10,14 +10,12 @@ import com.iantipov.game.gameObjects.GameObject;
 import com.iantipov.game.interfaces.Movable;
 
 public class MenuScreen extends Base2DScreen {
-    private SpriteBatch batch;
     private GameObject logo;
     private GameObject ship;
 
     @Override
     public void show() {
         super.show();
-        batch = new SpriteBatch();
         logo = new GameObject();
         ship = new GameObject(new Texture("Ship.png"), new Vector2(50,50), new Vector2(100, 100), 1.8f);
     }
@@ -29,14 +27,11 @@ public class MenuScreen extends Base2DScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         logo.draw(batch);
-        logo.move();
-        ship.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
         logo.dispose();
         ship.dispose();
         super.dispose();
