@@ -99,7 +99,6 @@ public class PlayerShip extends Sprite {
     }
 
     public void shoot() {
-        System.out.println("Fire!");
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, atlas.findRegion("bulletMainShip"), new Vector2(pos.x, getTop()), new Vector2(0, 12f), 0.8f, worldBounds, 1);
     }

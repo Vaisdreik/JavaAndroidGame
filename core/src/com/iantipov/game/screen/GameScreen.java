@@ -3,6 +3,7 @@ package com.iantipov.game.screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -39,7 +40,7 @@ public class GameScreen extends Base2DScreen implements Interactable {
     private ButtonRight btnRight;
     private ButtonShoot btnShoot;
 
-    private Music shootSound;
+    private Sound shootSound;
 
     public GameScreen(Game game) {
         super();
@@ -65,8 +66,8 @@ public class GameScreen extends Base2DScreen implements Interactable {
         bulletPool = new BulletPool();
         playerShip = new PlayerShip(mainTextureAtlas, bulletPool);
 
-        shootSound = Gdx.audio.newMusic(Gdx.files.internal("shoot_sfx.mp3"));
-        shootSound.setLooping(false);
+        shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot_sfx.mp3"));
+
     }
 
     @Override
@@ -171,8 +172,6 @@ public class GameScreen extends Base2DScreen implements Interactable {
         } else if (obj == btnRight) {
             playerShip.moveRight(btnRight.getButtonState());
         } else if (obj == btnShoot) {
-            if (shootSound.isPlaying()) shootSound.stop();
-            shootSound.setPosition(1.5f);
             shootSound.play();
             playerShip.shoot();
         }
