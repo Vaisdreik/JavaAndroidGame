@@ -2,6 +2,7 @@ package com.iantipov.game.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,8 +12,8 @@ import com.iantipov.game.base.Base2DScreen;
 import com.iantipov.game.interfaces.Interactable;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.sprites.Background;
-import com.iantipov.game.sprites.ButtonExit;
-import com.iantipov.game.sprites.ButtonPlay;
+import com.iantipov.game.sprites.buttons.ButtonExit;
+import com.iantipov.game.sprites.buttons.ButtonPlay;
 import com.iantipov.game.sprites.Star;
 
 
@@ -31,6 +32,8 @@ public class MenuScreen extends Base2DScreen implements Interactable {
     private ButtonExit btnExit;
     private ButtonPlay btnPlay;
 
+    private Music music;
+
     public MenuScreen(Game game) {
         super();
         this.game = game;
@@ -48,6 +51,9 @@ public class MenuScreen extends Base2DScreen implements Interactable {
         }
         btnExit = new ButtonExit(textureAtlas, this);
         btnPlay = new ButtonPlay(textureAtlas, this);
+        music = Gdx.audio.newMusic(Gdx.files.internal("Space_adventure_01.mp3"));
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -90,6 +96,7 @@ public class MenuScreen extends Base2DScreen implements Interactable {
     public void dispose() {
         bgTexture.dispose();
         textureAtlas.dispose();
+        music.dispose();
         super.dispose();
     }
 

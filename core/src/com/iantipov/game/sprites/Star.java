@@ -1,7 +1,6 @@
 package com.iantipov.game.sprites;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.iantipov.game.base.Sprite;
 import com.iantipov.game.math.Rect;

@@ -1,0 +1,40 @@
+
+gameGUIAtlas.png
+format: RGBA8888
+filter: MipMapLinearNearest,Linear
+repeat: none
+explosion
+  rotate: false
+  xy: 1, 1
+  size: 468, 466
+  orig: 468, 466
+  offset: 0, 0
+  index: -1
+down
+  rotate: false
+  xy: 471, 339
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+left
+  rotate: false
+  xy: 471, 209
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+right
+  rotate: false
+  xy: 601, 339
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+up
+  rotate: false
+  xy: 471, 79
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1

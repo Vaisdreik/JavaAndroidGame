@@ -1,17 +1,16 @@
 package com.iantipov.game.base;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.iantipov.game.interfaces.Interactable;
 
-public class Button extends Sprite {
+public class ClickButton extends Sprite {
 
-    private int pointer;
-    private boolean isPressed;
-    private Interactable interObj;
+    protected int pointer;
+    protected boolean isPressed;
+    protected Interactable interObj;
 
-    public Button(TextureRegion region, Interactable interObj) {
+    public ClickButton(TextureRegion region, Interactable interObj) {
         super(region);
         this.interObj = interObj;
     }
