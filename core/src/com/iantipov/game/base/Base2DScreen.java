@@ -17,6 +17,7 @@ public class Base2DScreen implements Screen, InputProcessor {
     private Rect screenBounds; //border of draw area in pixels
     private Rect worldBounds; // border of projection of world coordinates
     private Rect glBounds; // borders of world -gl proection
+
     protected Matrix4 worldToGl;
     protected Matrix3 screenToWorld;
 
@@ -51,6 +52,11 @@ public class Base2DScreen implements Screen, InputProcessor {
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
         batch.setProjectionMatrix(worldToGl);
         MatrixUtils.calcTransitionMatrix(screenToWorld,screenBounds,worldBounds);
+        resize(worldBounds);
+    }
+
+    public void resize(Rect worldBounds) {
+
     }
 
     @Override

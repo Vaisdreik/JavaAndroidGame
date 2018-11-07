@@ -15,10 +15,9 @@ import com.iantipov.game.sprites.ButtonExit;
 import com.iantipov.game.sprites.ButtonPlay;
 import com.iantipov.game.sprites.Star;
 
+public class GameScreen extends Base2DScreen implements Interactable {
 
-public class MenuScreen extends Base2DScreen implements Interactable {
-
-    private static final int STAR_COUNT = 256;
+    private static final int STAR_COUNT = 60;
 
     private Game game;
 
@@ -29,9 +28,8 @@ public class MenuScreen extends Base2DScreen implements Interactable {
     private Star[] stars;
 
     private ButtonExit btnExit;
-    private ButtonPlay btnPlay;
 
-    public MenuScreen(Game game) {
+    public GameScreen(Game game) {
         super();
         this.game = game;
     }
@@ -47,7 +45,6 @@ public class MenuScreen extends Base2DScreen implements Interactable {
             stars[i] = new Star(textureAtlas);
         }
         btnExit = new ButtonExit(textureAtlas, this);
-        btnPlay = new ButtonPlay(textureAtlas, this);
     }
 
     @Override
@@ -72,7 +69,6 @@ public class MenuScreen extends Base2DScreen implements Interactable {
             stars[i].draw(batch);
         }
         btnExit.draw(batch);
-        btnPlay.draw(batch);
         batch.end();
     }
 
@@ -83,7 +79,6 @@ public class MenuScreen extends Base2DScreen implements Interactable {
             stars[i].resize(worldBounds);
         }
         btnExit.resize(worldBounds);
-        btnPlay.resize(worldBounds);
     }
 
     @Override
@@ -96,28 +91,19 @@ public class MenuScreen extends Base2DScreen implements Interactable {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         btnExit.touchDown(touch, pointer);
-        btnPlay.touchDown(touch, pointer);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
         btnExit.touchUp(touch, pointer);
-        btnPlay.touchUp(touch, pointer);
         return super.touchUp(touch, pointer);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
     }
 
     @Override
     public void action(Object obj) {
         if (obj == btnExit) {
             Gdx.app.exit();
-        } else if (obj == btnPlay) {
-            game.setScreen(new GameScreen(game));
         }
     }
 }
