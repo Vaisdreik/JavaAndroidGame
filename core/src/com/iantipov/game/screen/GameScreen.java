@@ -1,8 +1,6 @@
 package com.iantipov.game.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,17 +11,18 @@ import com.iantipov.game.base.Base2DScreen;
 import com.iantipov.game.interfaces.Interactable;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.pool.BulletPool;
+import com.iantipov.game.pool.EnemyPool;
 import com.iantipov.game.sprites.*;
 import com.iantipov.game.sprites.buttons.ButtonExit;
 import com.iantipov.game.sprites.buttons.ButtonShoot;
 import com.iantipov.game.sprites.buttons.ButtonLeft;
 import com.iantipov.game.sprites.buttons.ButtonRight;
+import com.iantipov.game.utils.EnemiesEmmiter;
 
 public class GameScreen extends Base2DScreen implements Interactable {
 
     private static final int STAR_COUNT = 60;
 
-    private Game game;
     private PlayerShip playerShip;
     private BulletPool bulletPool;
 
@@ -42,9 +41,11 @@ public class GameScreen extends Base2DScreen implements Interactable {
 
     private Sound shootSound;
 
-    public GameScreen(Game game) {
+    private EnemyPool enemyPool;
+    private EnemiesEmmiter enemiesEmmiter;
+
+    public GameScreen() {
         super();
-        this.game = game;
     }
 
     @Override
@@ -63,10 +64,12 @@ public class GameScreen extends Base2DScreen implements Interactable {
         btnLeft = new ButtonLeft(gameGUIAtlas, this);
         btnRight = new ButtonRight(gameGUIAtlas, this);
         btnShoot = new ButtonShoot(gameGUIAtlas, this);
-        bulletPool = new BulletPool();
-        playerShip = new PlayerShip(mainTextureAtlas, bulletPool);
-
         shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot_sfx.mp3"));
+        bulletPool = new BulletPool();
+        playerShip = new PlayerShip(mainTextureAtlas, bulletPool, shootSound);
+
+        enemyPool = new EnemyPool(bulletPool, worldBounds, shootSound);
+        enemiesEmmiter = new EnemiesEmmiter(enemyPool, worldBounds, mainTextureAtlas);
 
     }
 
@@ -93,6 +96,8 @@ public class GameScreen extends Base2DScreen implements Interactable {
         }
         playerShip.update(delta);
         bulletPool.updateActiveObjects(delta);
+        enemyPool.updateActiveObjects(delta);
+        enemiesEmmiter.generate(delta);
     }
 
     public void draw() {
@@ -105,6 +110,7 @@ public class GameScreen extends Base2DScreen implements Interactable {
         }
         playerShip.draw(batch);
         bulletPool.drawActiveObjects(batch);
+        enemyPool.drawActiveObjects(batch);
         btnLeft.draw(batch);
         btnRight.draw(batch);
         btnShoot.draw(batch);
@@ -131,6 +137,7 @@ public class GameScreen extends Base2DScreen implements Interactable {
         textureAtlas.dispose();
         mainTextureAtlas.dispose();
         gameGUIAtlas.dispose();
+        shootSound.dispose();
         super.dispose();
     }
 
@@ -144,6 +151,8 @@ public class GameScreen extends Base2DScreen implements Interactable {
         playerShip.keyUp(keycode);
         return super.keyUp(keycode);
     }
+
+
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
@@ -172,8 +181,8 @@ public class GameScreen extends Base2DScreen implements Interactable {
         } else if (obj == btnRight) {
             playerShip.moveRight(btnRight.getButtonState());
         } else if (obj == btnShoot) {
-            shootSound.play();
-            playerShip.shoot();
+            //shootSound.play();
+            System.out.println(playerShip.shooting());
         }
     }
 }

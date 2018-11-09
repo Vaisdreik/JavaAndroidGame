@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.iantipov.game.Settings;
 import com.iantipov.game.base.Base2DScreen;
 import com.iantipov.game.interfaces.Interactable;
 import com.iantipov.game.math.Rect;
@@ -53,6 +54,7 @@ public class MenuScreen extends Base2DScreen implements Interactable {
         btnPlay = new ButtonPlay(textureAtlas, this);
         music = Gdx.audio.newMusic(Gdx.files.internal("Space_adventure_01.mp3"));
         music.setLooping(true);
+        music.setVolume(Settings.getInstance().getMusic_volume());
         music.play();
     }
 
@@ -124,7 +126,7 @@ public class MenuScreen extends Base2DScreen implements Interactable {
         if (obj == btnExit) {
             Gdx.app.exit();
         } else if (obj == btnPlay) {
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new GameScreen());
         }
     }
 }

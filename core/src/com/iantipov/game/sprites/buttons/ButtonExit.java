@@ -8,7 +8,7 @@ import com.iantipov.game.math.Rect;
 public class ButtonExit extends ClickButton {
     public ButtonExit(TextureAtlas atlas, Interactable interObj) {
         super(atlas.findRegion("btExit"), interObj);
-        setHeightProportion(3f);
+        setHeightProportion(0.1f);
     }
 
     @Override

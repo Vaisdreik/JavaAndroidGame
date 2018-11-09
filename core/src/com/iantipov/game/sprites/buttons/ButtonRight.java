@@ -8,7 +8,7 @@ import com.iantipov.game.math.Rect;
 public class ButtonRight extends PressButton {
     public ButtonRight(TextureAtlas atlas, Interactable interObj) {
         super(atlas.findRegion("right"), interObj);
-        setHeightProportion(7f);
+        setHeightProportion(0.18f);
     }
 
     @Override

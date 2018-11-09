@@ -1,58 +1,62 @@
 package com.iantipov.game.sprites;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.iantipov.game.base.Sprite;
+import com.iantipov.game.base.Ship;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.pool.BulletPool;
 
-public class PlayerShip extends Sprite {
+public class PlayerShip extends Ship {
 
-    private static final float SPEED = 2f;
+    private static final float SPEED = 0.5f;
     private Vector2 v = new Vector2();
-    private Rect worldBounds;
 
-    private BulletPool bulletPool;
-    private TextureAtlas atlas;
     private boolean pressedLeft;
     private boolean pressedRight;
 
-    public PlayerShip(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("main_ship"), 1, 2, 2);
-        this.atlas = atlas;
-        setHeightProportion(5f);
-        v.x = 0;
-        v.y = 0;
+    private boolean isConstantShooting = false;
+
+    public PlayerShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+        super(atlas.findRegion("main_ship"), 1, 2, 2, shootSound);
+        setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
+        this.bulletV.set(0, 0.5f);
+        this.bulletHeight = 0.01f;
+        this.bulletDamage = 1;
+        this.reloadInterval = 0.3f;
+        this.reloadTimer = -1;
+        this.bulletRegion = atlas.findRegion("bulletMainShip");
     }
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(v, delta);
         checkAndHandleBounds();
+        if (isConstantShooting)
+            shoot();
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
-        setBottom(worldBounds.getBottom() + 6f);
+        super.resize(worldBounds);
+        setBottom(worldBounds.getBottom() + 0.17f);
     }
 
     private void checkAndHandleBounds() {
         if (getLeft() < worldBounds.getLeft()) setLeft(worldBounds.getLeft());
         if (getRight() > worldBounds.getRight()) setRight(worldBounds.getRight());
-        if (getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
-        if (getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
     }
 
     public void moveLeft(boolean isMove) {
-        if (isMove) v.x += -1f*SPEED;
+        if (isMove) v.x += -1f * SPEED;
         else v.x = 0;
     }
 
     public void moveRight(boolean isMove) {
-        if (isMove) v.x += 1f*SPEED;
+        if (isMove) v.x += 1f * SPEED;
         else v.x = 0;
     }
 
@@ -68,9 +72,14 @@ public class PlayerShip extends Sprite {
                 pressedRight = true;
                 moveRight(pressedRight);
                 break;
+            case Input.Keys.SPACE:
+            case Input.Keys.UP:
+                isConstantShooting = true;
+                break;
         }
         return false;
     }
+
     public boolean keyUp(int keycode) {
         switch (keycode) {
             case Input.Keys.A:
@@ -91,15 +100,15 @@ public class PlayerShip extends Sprite {
                     moveRight(pressedRight);
                 }
                 break;
+            case Input.Keys.SPACE:
             case Input.Keys.UP:
-                shoot();
+                isConstantShooting = false;
                 break;
         }
         return false;
     }
 
-    public void shoot() {
-        Bullet bullet = bulletPool.obtain();
-        bullet.set(this, atlas.findRegion("bulletMainShip"), new Vector2(pos.x, getTop()), new Vector2(0, 12f), 0.8f, worldBounds, 1);
+    public boolean shooting() {
+        return isConstantShooting = !isConstantShooting;
     }
 }
