@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.iantipov.game.base.Ship;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.pool.BulletPool;
+import com.iantipov.game.pool.ExplosionPool;
 
 public class PlayerShip extends Ship {
 
@@ -18,7 +19,7 @@ public class PlayerShip extends Ship {
 
     private boolean isConstantShooting = false;
 
-    public PlayerShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+    public PlayerShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2, shootSound);
         setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
@@ -28,6 +29,8 @@ public class PlayerShip extends Ship {
         this.reloadInterval = 0.3f;
         this.reloadTimer = -1;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.explosionPool = explosionPool;
+        this.hp = 1;
     }
 
     @Override
@@ -111,4 +114,14 @@ public class PlayerShip extends Ship {
     public boolean shooting() {
         return isConstantShooting = !isConstantShooting;
     }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() <getBottom()
+        );
+    }
+
+
 }

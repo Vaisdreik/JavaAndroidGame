@@ -71,7 +71,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override

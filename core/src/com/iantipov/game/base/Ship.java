@@ -6,11 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.iantipov.game.Settings;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.pool.BulletPool;
+import com.iantipov.game.pool.ExplosionPool;
 import com.iantipov.game.sprites.Bullet;
+import com.iantipov.game.sprites.Explosion;
 
-public class Ship extends Sprite {
+public abstract class Ship extends Sprite {
     protected Vector2 v = new Vector2();
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected Rect worldBounds;
 
     protected Vector2 bulletV = new Vector2();
@@ -19,6 +22,9 @@ public class Ship extends Sprite {
 
     protected float reloadInterval;
     protected float reloadTimer;
+
+    protected float damageAnimateInterval = 0.1f;
+    protected float damageAnimateTimer;
 
     protected int hp;
     protected TextureRegion bulletRegion;
@@ -37,6 +43,8 @@ public class Ship extends Sprite {
     public void update(float delta) {
         if (reloadTimer > 0)
             reloadTimer -= delta;
+        if (damageAnimateTimer > 0)
+            damageAnimateTimer -= delta;
     }
 
     @Override
@@ -51,5 +59,29 @@ public class Ship extends Sprite {
             bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, bulletDamage);
             shootSound.play(Settings.getInstance().getSfx_volume());
         }
+        if (damageAnimateTimer <= 0) {
+            frame = 0;
+        }
+    }
+
+    public void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(), pos);
+    }
+
+    public void damage(int damage) {
+        frame = 1;
+        damageAnimateTimer = damageAnimateInterval;
+        hp -= damage;
+        if (hp <= 0) {
+            destroy();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        boom();
+        hp = 0;
+        super.destroy();
     }
 }

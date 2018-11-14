@@ -52,7 +52,7 @@ public class MenuScreen extends Base2DScreen implements Interactable {
         }
         btnExit = new ButtonExit(textureAtlas, this);
         btnPlay = new ButtonPlay(textureAtlas, this);
-        music = Gdx.audio.newMusic(Gdx.files.internal("Space_adventure_01.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/Space_adventure_01.mp3"));
         music.setLooping(true);
         music.setVolume(Settings.getInstance().getMusic_volume());
         music.play();
@@ -126,7 +126,7 @@ public class MenuScreen extends Base2DScreen implements Interactable {
         if (obj == btnExit) {
             Gdx.app.exit();
         } else if (obj == btnPlay) {
-            game.setScreen(new GameScreen());
+            game.setScreen(new GameScreen(game));
         }
     }
 }
