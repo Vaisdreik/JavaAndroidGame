@@ -11,6 +11,8 @@ public class Bullet extends Sprite {
     private Vector2 v = new Vector2();
     private int damage;
     private Object owner;
+    private int energyCost;
+
     public Bullet() {
         regions = new TextureRegion[1];
     }
@@ -31,6 +33,7 @@ public class Bullet extends Sprite {
         setHeightProportion(height);
         this.worldBounds = worldBounds;
         this.damage = damage;
+        this.energyCost = 1;
     }
 
     @Override
@@ -40,16 +43,28 @@ public class Bullet extends Sprite {
             destroy();
         }
     }
+
     public int getDamage() {
         return damage;
     }
+
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
     public Object getOwner() {
         return owner;
     }
+
     public void setOwner(Object owner) {
         this.owner = owner;
+    }
+
+    public int getEnergyCost() {
+        return energyCost;
+    }
+
+    public void setEnergyCost(int energyCost) {
+        this.energyCost = energyCost;
     }
 }

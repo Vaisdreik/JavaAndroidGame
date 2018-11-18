@@ -3,6 +3,7 @@ package com.iantipov.game.sprites;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.iantipov.game.Settings;
 import com.iantipov.game.base.Sprite;
 
 public class Explosion extends Sprite {
@@ -19,7 +20,7 @@ public class Explosion extends Sprite {
     public void set(float height, Vector2 pos) {
         this.pos.set(pos);
         setHeightProportion(height);
-        sound.play();
+        sound.play(Settings.getInstance().getSfx_volume());
     }
 
     @Override

@@ -4,33 +4,39 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.iantipov.game.PlayerStats;
 import com.iantipov.game.base.Ship;
 import com.iantipov.game.math.Rect;
 import com.iantipov.game.pool.BulletPool;
 import com.iantipov.game.pool.ExplosionPool;
 
 public class PlayerShip extends Ship {
+    private PlayerStats player;
 
-    private static final float SPEED = 0.5f;
     private Vector2 v = new Vector2();
+    private float speed;
+
 
     private boolean pressedLeft;
     private boolean pressedRight;
 
     private boolean isConstantShooting = false;
 
-    public PlayerShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
+    public PlayerShip(PlayerStats playerStats, TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2, shootSound);
+        player = playerStats;
         setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
         this.bulletV.set(0, 0.5f);
         this.bulletHeight = 0.01f;
-        this.bulletDamage = 1;
-        this.reloadInterval = 0.3f;
+        this.bulletDamage = player.getCurrentDamage();
+        this.fireInterval = player.getCurrentFireInterval();
         this.reloadTimer = -1;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.explosionPool = explosionPool;
-        this.hp = 1;
+        this.hp = player.getCurrentHP();
+        this.energy = player.getCurrentEnergy();
+        this.speed = player.getCurrentSpeed();
     }
 
     @Override
@@ -54,12 +60,12 @@ public class PlayerShip extends Ship {
     }
 
     public void moveLeft(boolean isMove) {
-        if (isMove) v.x += -1f * SPEED;
+        if (isMove) v.x += -1f * speed;
         else v.x = 0;
     }
 
     public void moveRight(boolean isMove) {
-        if (isMove) v.x += 1f * SPEED;
+        if (isMove) v.x += 1f * speed;
         else v.x = 0;
     }
 
@@ -119,9 +125,39 @@ public class PlayerShip extends Ship {
         return !(bullet.getRight() < getLeft()
                 || bullet.getLeft() > getRight()
                 || bullet.getBottom() > pos.y
-                || bullet.getTop() <getBottom()
+                || bullet.getTop() < getBottom()
         );
     }
 
 
+    public void getBonus(Bonus bonus) {
+        switch (bonus.getBonusType()) {
+            case RECOVER_ENERGY:
+                if (energy+3 >= player.getMaxEnergy()) {
+                    player.setMaxEnergy(energy++);
+                } else if (energy + bonus.getAmount() <= player.getMaxEnergy()) {
+                    energy += bonus.getAmount();
+                } else {
+                    energy = player.getMaxEnergy();
+                }
+                break;
+            case RECOVER_HP:
+                if (hp == player.getMaxHP()) {
+                    player.setMaxHP(hp++);
+                } else if (hp + bonus.getAmount() <= player.getMaxHP()) {
+                    hp += bonus.getAmount();
+                } else {
+                    hp = player.getMaxHP();
+                }
+                break;
+        }
+    }
+
+    public void upLevel() {
+        player.setCurrentLevel(player.getCurrentLevel()+1);
+        player.setMaxHP(player.getMaxHP()+5);
+        player.setMaxEnergy(player.getMaxEnergy()+5);
+        player.setCurrentDamage(++bulletDamage);
+
+    }
 }

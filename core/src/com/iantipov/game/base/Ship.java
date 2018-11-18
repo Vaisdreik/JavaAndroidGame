@@ -20,13 +20,14 @@ public abstract class Ship extends Sprite {
     protected float bulletHeight;
     protected int bulletDamage;
 
-    protected float reloadInterval;
+    protected float fireInterval;
     protected float reloadTimer;
 
     protected float damageAnimateInterval = 0.1f;
     protected float damageAnimateTimer;
 
     protected int hp;
+    protected int energy;
     protected TextureRegion bulletRegion;
 
     private Sound shootSound;
@@ -53,11 +54,12 @@ public abstract class Ship extends Sprite {
     }
 
     protected void shoot() {
-        if (reloadTimer <= 0) {
-            reloadTimer = reloadInterval;
+        if (reloadTimer <= 0 && energy >0) {
+            reloadTimer = fireInterval;
             Bullet bullet = bulletPool.obtain();
             bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, bulletDamage);
             shootSound.play(Settings.getInstance().getSfx_volume());
+            energy -= bullet.getEnergyCost();
         }
         if (damageAnimateTimer <= 0) {
             frame = 0;
@@ -83,5 +85,13 @@ public abstract class Ship extends Sprite {
         boom();
         hp = 0;
         super.destroy();
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getEnergy() {
+        return energy;
     }
 }
